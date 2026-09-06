@@ -707,6 +707,11 @@ app.use((err: any, req: Request, res: Response, next: NextFunction) => {
 });
 
 // Start server on 0.0.0.0:3000
-app.listen(PORT, '0.0.0.0', () => {
-  console.log(`ASSGA Portal Server running at http://0.0.0.0:${PORT}`);
-});
+if (process.env.NODE_ENV !== 'test') {
+  app.listen(PORT, '0.0.0.0', () => {
+    console.log(`ASSGA Portal Server running at http://0.0.0.0:${PORT}`);
+  });
+}
+
+export { app };
+export default app;

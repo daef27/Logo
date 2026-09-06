@@ -1,0 +1,488 @@
+<%- include('../partials/header', { title: 'Painel do Administrador (Superusuário) - ASSGA', active_page: 'admin' }) %>
+
+<div class="container-fluid px-lg-5 py-4">
+    <!-- Top Admin Bar -->
+    <div class="card border-0 shadow-sm rounded-4 p-4 mb-4 text-white" style="background: linear-gradient(135deg, #0f172a 0%, #003366 100%);">
+        <div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
+            <div class="d-flex align-items-center gap-3">
+                <div class="bg-warning text-dark rounded-circle p-3 d-flex align-items-center justify-content-center shadow" style="width: 54px; height: 54px;">
+                    <i class="fa-solid fa-crown fs-4"></i>
+                </div>
+                <div>
+                    <div class="d-flex align-items-center gap-2">
+                        <h4 class="fw-bold mb-0 text-white"><%= adminUser.nome %></h4>
+                        <span class="badge bg-success"><i class="fa-solid fa-check-double me-1"></i>is_superuser</span>
+                        <span class="badge bg-info text-dark"><i class="fa-solid fa-id-badge me-1"></i>is_staff</span>
+                    </div>
+                    <small class="text-light opacity-90">Usuário: <strong><%= adminUser.username %></strong> | <%= adminUser.email %></small>
+                </div>
+            </div>
+            <div class="d-flex gap-2">
+                <button type="button" class="btn btn-warning fw-bold px-3 shadow-sm" data-bs-toggle="modal" data-bs-target="#modalNovoAssociado">
+                    <i class="fa-solid fa-user-plus me-1"></i> Novo Associado
+                </a>
+                <button type="button" class="btn btn-light fw-bold px-3 text-primary shadow-sm" data-bs-toggle="modal" data-bs-target="#modalNovoEvento">
+                    <i class="fa-solid fa-calendar-plus me-1"></i> Novo Evento
+                </button>
+                <a href="/admin/logout" class="btn btn-outline-danger px-3">
+                    <i class="fa-solid fa-arrow-right-from-bracket me-1"></i> Sair do Admin
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Indicadores Globais -->
+    <div class="row g-3 mb-4">
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm rounded-4 p-3 bg-white">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <div class="text-muted small fw-bold text-uppercase">Total de Associados</div>
+                        <h2 class="fw-bold text-primary mb-0"><%= associados.length %></h2>
+                    </div>
+                    <div class="bg-primary text-white rounded-circle p-3 d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
+                        <i class="fa-solid fa-users fs-4 text-warning"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm rounded-4 p-3 bg-white">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <div class="text-muted small fw-bold text-uppercase">Carteirinhas Ativas</div>
+                        <h2 class="fw-bold text-success mb-0"><%= carteirinhas.filter(c => c.ativa).length %></h2>
+                    </div>
+                    <div class="bg-success text-white rounded-circle p-3 d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
+                        <i class="fa-solid fa-id-card fs-4"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm rounded-4 p-3 bg-white">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <div class="text-muted small fw-bold text-uppercase">Receita Mensalidades</div>
+                        <% const totalPago = mensalidades.filter(m => m.status === 'Pago').reduce((acc, m) => acc + m.valor, 0); %>
+                        <h2 class="fw-bold text-dark mb-0">R$ <%= totalPago.toFixed(2).replace('.', ',') %></h2>
+                    </div>
+                    <div class="bg-warning text-dark rounded-circle p-3 d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
+                        <i class="fa-brands fa-pix fs-4"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm rounded-4 p-3 bg-white">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <div class="text-muted small fw-bold text-uppercase">Comprovantes p/ Análise</div>
+                        <% const pendentesCount = mensalidades.filter(m => m.status !== 'Pago').length; %>
+                        <h2 class="fw-bold <%= pendentesCount > 0 ? 'text-danger' : 'text-secondary' %> mb-0"><%= pendentesCount %></h2>
+                    </div>
+                    <div class="bg-danger text-white rounded-circle p-3 d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
+                        <i class="fa-solid fa-file-invoice-dollar fs-4"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navegação de Abas do Admin -->
+    <ul class="nav nav-pills mb-4 gap-2 border-bottom pb-3" id="adminTabs" role="tablist">
+        <li class="nav-item" role="presentation">
+            <button class="nav-link active fw-bold px-4" id="associados-tab" data-bs-toggle="pill" data-bs-target="#tab-associados" type="button" role="tab">
+                <i class="fa-solid fa-users me-2"></i> Associados (<%= associados.length %>)
+            </button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link fw-bold px-4 position-relative" id="mensalidades-tab" data-bs-toggle="pill" data-bs-target="#tab-mensalidades" type="button" role="tab">
+                <i class="fa-brands fa-pix me-2"></i> Mensalidades PIX (<%= mensalidades.length %>)
+                <% if (pendentesCount > 0) { %>
+                    <span class="badge bg-danger ms-1"><%= pendentesCount %></span>
+                <% } %>
+            </button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link fw-bold px-4" id="eventos-tab" data-bs-toggle="pill" data-bs-target="#tab-eventos" type="button" role="tab">
+                <i class="fa-solid fa-calendar me-2"></i> Eventos e Atividades (<%= eventos.length %>)
+            </button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link fw-bold px-4" id="diagnostico-tab" data-bs-toggle="pill" data-bs-target="#tab-diagnostico" type="button" role="tab">
+                <i class="fa-solid fa-shield-halved me-2"></i> Diagnóstico & Arquitetura
+            </button>
+        </li>
+    </ul>
+
+    <!-- Conteúdo das Abas -->
+    <div class="tab-content" id="adminTabsContent">
+        <!-- ABA 1: ASSOCIADOS -->
+        <div class="tab-pane fade show active" id="tab-associados" role="tabpanel">
+            <div class="card border-0 shadow-sm rounded-4 p-4">
+                <div class="d-flex flex-wrap justify-content-between align-items-center mb-3">
+                    <h5 class="fw-bold text-primary mb-0">Gestão Oficial de Associados e Carteirinhas</h5>
+                    <button type="button" class="btn btn-sm btn-primary fw-bold" data-bs-toggle="modal" data-bs-target="#modalNovoAssociado">
+                        <i class="fa-solid fa-plus me-1"></i> Cadastrar Novo Sócio
+                    </button>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="table-light small">
+                            <tr>
+                                <th>Foto</th>
+                                <th>Matrícula</th>
+                                <th>Nome Completo</th>
+                                <th>CPF</th>
+                                <th>Categoria</th>
+                                <th>Identidade</th>
+                                <th>Status</th>
+                                <th>Validade</th>
+                                <th class="text-end">Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% for (const a of associados) { %>
+                                <tr>
+                                    <td>
+                                        <img src="<%= a.foto_url %>" alt="<%= a.nome %>" class="rounded-circle border" style="width: 40px; height: 40px; object-fit: cover;">
+                                    </td>
+                                    <td><span class="badge bg-light text-primary border font-monospace"><%= a.matricula %></span></td>
+                                    <td class="fw-bold"><%= a.nome %></td>
+                                    <td class="small text-muted"><%= a.cpf %></td>
+                                    <td><span class="badge bg-secondary"><%= a.categoria %></span></td>
+                                    <td class="small"><%= a.identidade_surda %></td>
+                                    <td>
+                                        <% if (a.status === 'Ativo') { %>
+                                            <span class="badge bg-success">Ativo</span>
+                                        <% } else if (a.status === 'Pendente') { %>
+                                            <span class="badge bg-warning text-dark">Pendente</span>
+                                        <% } else { %>
+                                            <span class="badge bg-danger">Inativo</span>
+                                        <% } %>
+                                    </td>
+                                    <td class="small"><%= a.validade_carteirinha %></td>
+                                    <td class="text-end">
+                                        <div class="btn-group btn-group-sm">
+                                            <a href="/carteirinha/<%= a.matricula %>" class="btn btn-outline-primary" title="Ver Carteirinha" target="_blank">
+                                                <i class="fa-solid fa-id-card"></i>
+                                            </a>
+                                            <!-- Alternar Status -->
+                                            <form method="post" action="/admin/associados/<%= a.id %>/status" class="d-inline">
+                                                <input type="hidden" name="novoStatus" value="<%= a.status === 'Ativo' ? 'Inativo' : 'Ativo' %>">
+                                                <button type="submit" class="btn <%= a.status === 'Ativo' ? 'btn-outline-warning' : 'btn-outline-success' %>" title="<%= a.status === 'Ativo' ? 'Suspender' : 'Ativar' %>">
+                                                    <i class="fa-solid <%= a.status === 'Ativo' ? 'fa-user-slash' : 'fa-user-check' %>"></i>
+                                                </button>
+                                            </form>
+                                            <!-- Renovar Carteirinha -->
+                                            <form method="post" action="/admin/associados/<%= a.id %>/renovar" class="d-inline">
+                                                <button type="submit" class="btn btn-outline-info" title="Renovar Carteirinha (+1 ano)">
+                                                    <i class="fa-solid fa-rotate-right"></i>
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
+                            <% } %>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- ABA 2: MENSALIDADES E COMPROVANTES PIX -->
+        <div class="tab-pane fade" id="tab-mensalidades" role="tabpanel">
+            <div class="card border-0 shadow-sm rounded-4 p-4">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h5 class="fw-bold text-primary mb-0">Controle de Mensalidades & Comprovantes PIX</h5>
+                    <span class="badge bg-success"><i class="fa-brands fa-pix me-1"></i>Chave: <%= assgaConfig.chave_pix %></span>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="table-light small">
+                            <tr>
+                                <th>ID</th>
+                                <th>Associado</th>
+                                <th>Referência</th>
+                                <th>Valor</th>
+                                <th>Status Atual</th>
+                                <th>Data Pagamento</th>
+                                <th>Comprovante / Obs</th>
+                                <th class="text-end">Ação Rápida de Superusuário</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% for (const m of mensalidades) { %>
+                                <% const assoc = associados.find(a => a.id === m.associado_id); %>
+                                <tr>
+                                    <td>#<%= m.id %></td>
+                                    <td class="fw-bold">
+                                        <% if (assoc) { %>
+                                            <%= assoc.nome %> <span class="small text-muted">(<%= assoc.matricula %>)</span>
+                                        <% } else { %>
+                                            Associado #<%= m.associado_id %>
+                                        <% } %>
+                                    </td>
+                                    <td><%= String(m.mes_referencia).padStart(2, '0') %>/<%= m.ano_referencia %></td>
+                                    <td class="fw-bold text-primary">R$ <%= m.valor.toFixed(2).replace('.', ',') %></td>
+                                    <td>
+                                        <% if (m.status === 'Pago') { %>
+                                            <span class="badge bg-success"><i class="fa-solid fa-check me-1"></i>Pago</span>
+                                        <% } else if (m.status === 'Em Análise') { %>
+                                            <span class="badge bg-warning text-dark"><i class="fa-solid fa-clock me-1"></i>Em Análise</span>
+                                        <% } else { %>
+                                            <span class="badge bg-danger">Pendente</span>
+                                        <% } %>
+                                    </td>
+                                    <td class="small"><%= m.data_pagamento || '-' %></td>
+                                    <td class="small">
+                                        <% if (m.comprovante_nome) { %>
+                                            <span class="badge bg-light text-dark border"><i class="fa-solid fa-file-arrow-down me-1"></i><%= m.comprovante_nome %></span>
+                                        <% } %>
+                                        <% if (m.observacoes) { %>
+                                            <div class="text-muted fst-italic mt-1"><%= m.observacoes %></div>
+                                        <% } %>
+                                    </td>
+                                    <td class="text-end">
+                                        <div class="btn-group btn-group-sm">
+                                            <% if (m.status !== 'Pago') { %>
+                                                <form method="post" action="/admin/mensalidades/<%= m.id %>/status" class="d-inline">
+                                                    <input type="hidden" name="status" value="Pago">
+                                                    <button type="submit" class="btn btn-success fw-bold" title="Aprovar e Marcar Pago">
+                                                        <i class="fa-solid fa-check me-1"></i> Aprovar
+                                                    </button>
+                                                </form>
+                                            <% } else { %>
+                                                <form method="post" action="/admin/mensalidades/<%= m.id %>/status" class="d-inline">
+                                                    <input type="hidden" name="status" value="Pendente">
+                                                    <button type="submit" class="btn btn-outline-secondary" title="Reverter para Pendente">
+                                                        <i class="fa-solid fa-undo me-1"></i> Reabrir
+                                                    </button>
+                                                </form>
+                                            <% } %>
+                                        </div>
+                                    </td>
+                                </tr>
+                            <% } %>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- ABA 3: EVENTOS -->
+        <div class="tab-pane fade" id="tab-eventos" role="tabpanel">
+            <div class="card border-0 shadow-sm rounded-4 p-4">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h5 class="fw-bold text-primary mb-0">Gestão de Eventos Oficiais</h5>
+                    <button type="button" class="btn btn-sm btn-primary fw-bold" data-bs-toggle="modal" data-bs-target="#modalNovoEvento">
+                        <i class="fa-solid fa-plus me-1"></i> Cadastrar Evento
+                    </button>
+                </div>
+
+                <div class="row g-3">
+                    <% for (const ev of eventos) { %>
+                        <div class="col-md-6 col-lg-4">
+                            <div class="card h-100 border rounded-3 overflow-hidden shadow-sm">
+                                <img src="<%= ev.imagem_url %>" class="card-img-top" alt="<%= ev.titulo %>" style="height: 140px; object-fit: cover;">
+                                <div class="card-body p-3 d-flex flex-column">
+                                    <div class="d-flex justify-content-between align-items-center mb-1">
+                                        <span class="badge bg-primary"><%= ev.tipo %></span>
+                                        <% if (ev.libras_disponivel) { %>
+                                            <span class="badge bg-warning text-dark"><i class="fa-solid fa-hands-asl-interpreting me-1"></i>LIBRAS</span>
+                                        <% } %>
+                                    </div>
+                                    <h6 class="fw-bold mb-1 text-dark"><%= ev.titulo %></h6>
+                                    <p class="small text-muted mb-2"><i class="fa-solid fa-calendar me-1"></i><%= ev.data_inicio %> | <i class="fa-solid fa-location-dot me-1"></i><%= ev.local %></p>
+                                    <p class="small text-secondary flex-grow-1"><%= ev.descricao %></p>
+                                    <div class="pt-2 border-top text-end">
+                                        <form method="post" action="/admin/eventos/<%= ev.id %>/excluir" onsubmit="return confirm('Deseja realmente remover este evento?')" class="d-inline">
+                                            <button type="submit" class="btn btn-sm btn-outline-danger">
+                                                <i class="fa-solid fa-trash me-1"></i> Excluir Evento
+                                            </button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    <% } %>
+                </div>
+            </div>
+        </div>
+
+        <!-- ABA 4: DIAGNÓSTICO & VERCEL FIX -->
+        <div class="tab-pane fade" id="tab-diagnostico" role="tabpanel">
+            <div class="card border-0 shadow-sm rounded-4 p-4">
+                <h5 class="fw-bold text-primary mb-3"><i class="fa-solid fa-wrench me-2 text-warning"></i>Relatório Técnico de Diagnóstico e Resolução</h5>
+
+                <div class="alert alert-success d-flex align-items-center gap-3">
+                    <i class="fa-solid fa-circle-check fs-2"></i>
+                    <div>
+                        <h6 class="fw-bold mb-1">Problemas do Vercel / Django Eliminados com Sucesso:</h6>
+                        <ul class="mb-0 small ps-3">
+                            <li><strong>Superusuário Ativo Permanente</strong>: O usuário de administração não sofre mais com a perda de permissões <code>is_staff</code> e <code>is_superuser</code>.</li>
+                            <li><strong>Fim da Perda de Dados por SQLite Efêmero</strong>: O servidor Node.js/Express roda em execução contínua no Cloud Run, sem desligamentos intermitentes de instâncias.</li>
+                            <li><strong>Sessão e Cookies Seguros</strong>: Middlewares configurados com cookies de sessão e suporte a reverse proxy transparente (porta 3000).</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="row g-4 mt-2">
+                    <div class="col-md-6">
+                        <div class="card bg-light border-0 p-3 rounded-3 h-100">
+                            <h6 class="fw-bold text-dark"><i class="fa-solid fa-user-shield me-2 text-primary"></i>Superusuário Atual</h6>
+                            <ul class="list-unstyled small mb-0">
+                                <li><strong>Username:</strong> <%= adminUser.username %></li>
+                                <li><strong>E-mail:</strong> <%= adminUser.email %></li>
+                                <li><strong>is_staff:</strong> <span class="badge bg-success">True</span></li>
+                                <li><strong>is_superuser:</strong> <span class="badge bg-success">True</span></li>
+                                <li><strong>Acesso total:</strong> Associados, Carteirinhas, Mensalidades, Eventos</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card bg-light border-0 p-3 rounded-3 h-100">
+                            <h6 class="fw-bold text-dark"><i class="fa-solid fa-robot me-2 text-warning"></i>Status da Inteligência Artificial</h6>
+                            <ul class="list-unstyled small mb-0">
+                                <li><strong>Modelo de IA:</strong> Google Gemini <code>gemini-3.6-flash</code></li>
+                                <li><strong>Assistente Virtual LIBRAS:</strong> Operacional</li>
+                                <li><strong>Contingência Offline:</strong> Ativa com base institucional local</li>
+                                <li><strong>VLibras Widget:</strong> Integrado em todas as páginas</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL: NOVO ASSOCIADO -->
+<div class="modal fade" id="modalNovoAssociado" tabindex="-1" aria-labelledby="modalNovoAssociadoLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content border-0 shadow-lg rounded-4 overflow-hidden">
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title fw-bold" id="modalNovoAssociadoLabel"><i class="fa-solid fa-user-plus me-2 text-warning"></i>Cadastrar Novo Associado</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fechar"></button>
+            </div>
+            <form method="post" action="/admin/associados/novo">
+                <div class="modal-body p-4">
+                    <div class="row g-3">
+                        <div class="col-md-8">
+                            <label class="form-label small fw-bold">Nome Completo *</label>
+                            <input type="text" name="nome" class="form-control" required placeholder="Ex: Francisco Gomes da Silva">
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label small fw-bold">Matrícula (opcional)</label>
+                            <input type="text" name="matricula" class="form-control" placeholder="Automática se vazia">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label small fw-bold">CPF *</label>
+                            <input type="text" name="cpf" class="form-control" required placeholder="000.000.000-00">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label small fw-bold">RG</label>
+                            <input type="text" name="rg" class="form-control" placeholder="000.000 SSP/RN">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label small fw-bold">E-mail</label>
+                            <input type="email" name="email" class="form-control" placeholder="email@exemplo.com">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label small fw-bold">Telefone / WhatsApp *</label>
+                            <input type="text" name="telefone" class="form-control" required placeholder="(84) 90000-0000">
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label small fw-bold">Categoria *</label>
+                            <select name="categoria" class="form-select">
+                                <option value="Sócio Atleta">Sócio Atleta</option>
+                                <option value="Sócio Efetivo">Sócio Efetivo</option>
+                                <option value="Sócio Colaborador">Sócio Colaborador</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label small fw-bold">Identidade Surda *</label>
+                            <select name="identidade_surda" class="form-select">
+                                <option value="Surdo">Surdo</option>
+                                <option value="Deficiente Auditivo">Deficiente Auditivo</option>
+                                <option value="Ouvinte Aliado / Intérprete">Ouvinte Aliado / Intérprete</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label small fw-bold">Data de Nascimento</label>
+                            <input type="text" name="data_nascimento" class="form-control" placeholder="DD/MM/AAAA" value="01/01/2000">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer bg-light">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary fw-bold px-4">Salvar e Gerar Carteirinha</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL: NOVO EVENTO -->
+<div class="modal fade" id="modalNovoEvento" tabindex="-1" aria-labelledby="modalNovoEventoLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content border-0 shadow-lg rounded-4 overflow-hidden">
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title fw-bold" id="modalNovoEventoLabel"><i class="fa-solid fa-calendar-plus me-2 text-warning"></i>Publicar Novo Evento</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fechar"></button>
+            </div>
+            <form method="post" action="/admin/eventos/novo">
+                <div class="modal-body p-4">
+                    <div class="row g-3">
+                        <div class="col-md-8">
+                            <label class="form-label small fw-bold">Título do Evento *</label>
+                            <input type="text" name="titulo" class="form-control" required placeholder="Ex: Torneio Integração de Futsal">
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label small fw-bold">Tipo / Categoria *</label>
+                            <select name="tipo" class="form-select">
+                                <option value="Esportivo">Esportivo</option>
+                                <option value="Cultural">Cultural</option>
+                                <option value="Assembleia">Assembleia</option>
+                                <option value="Oficina">Oficina</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label small fw-bold">Data e Horário *</label>
+                            <input type="text" name="data_inicio" class="form-control" required placeholder="Ex: 15/10/2026 - 19:00">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label small fw-bold">Local *</label>
+                            <input type="text" name="local" class="form-control" required placeholder="Ex: Ginásio Municipal de Esportes">
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label small fw-bold">Descrição</label>
+                            <textarea name="descricao" class="form-control" rows="3" placeholder="Detalhes do evento, inscrições, programação..."></textarea>
+                        </div>
+                        <div class="col-md-8">
+                            <label class="form-label small fw-bold">URL da Imagem</label>
+                            <input type="text" name="imagem_url" class="form-control" value="/static/imagens/Assga_foto.jpg">
+                        </div>
+                        <div class="col-md-4 d-flex align-items-end">
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="checkbox" name="libras_disponivel" value="true" id="checkLibras" checked>
+                                <label class="form-check-label small fw-bold" for="checkLibras">
+                                    Acessível em LIBRAS
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer bg-light">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary fw-bold px-4">Publicar Evento</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<%- include('../partials/footer') %>

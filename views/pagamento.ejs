@@ -1,0 +1,90 @@
+<%- include('partials/header', { title: 'Mensalidades e Contribuição PIX - ASSGA', active_page: 'pagamento' }) %>
+
+<div class="container py-3">
+    <div class="row g-4 justify-content-center">
+        <div class="col-lg-7">
+            <div class="card border-0 shadow-sm rounded-4 p-4 p-md-5">
+                <span class="badge bg-success px-3 py-2 rounded-pill fw-bold text-uppercase d-inline-block mb-3 align-self-start shadow-sm">
+                    <i class="fa-brands fa-pix me-1"></i> Pagamento Instantâneo PIX
+                </span>
+                <h2 class="fw-bold text-primary mb-3">Mensalidade e Contribuições</h2>
+                <p class="text-secondary leading-relaxed">
+                    Sua contribuição mensal fortalece as atividades esportivas, culturais, manutenção da sede e a defesa intransigente dos direitos da comunidade surda.
+                </p>
+
+                <div class="bg-light p-4 rounded-4 border mb-4 text-center shadow-sm">
+                    <h6 class="text-muted text-uppercase small fw-bold mb-2">Chave Oficial PIX (E-mail)</h6>
+                    <div class="input-group input-group-lg mb-3">
+                        <input type="text" id="chavePix" class="form-control text-center fw-bold text-primary fs-5" value="Polyanabritoflamengobeatriz@gmail.com" readonly>
+                        <button class="btn btn-warning fw-bold px-4" type="button" onclick="copyPixKey()" id="btn-copy-pix">
+                            <i class="fa-solid fa-copy me-1"></i> Copiar
+                        </button>
+                    </div>
+                    <div id="pixCopyAlert" class="alert alert-success py-1 small d-none">
+                        <i class="fa-solid fa-check me-1"></i> Chave PIX copiada para a área de transferência!
+                    </div>
+                    <div class="small text-muted text-start mt-3 p-3 bg-white rounded-3 border">
+                        <div class="mb-1"><strong>Favorecido:</strong> ASSGA - Associação de Surdos de São Gonçalo do Amarante</div>
+                        <div class="mb-1"><strong>CNPJ:</strong> 57.242.499/0001-60</div>
+                        <div><strong>Valor da Mensalidade Padrão:</strong> <span class="badge bg-primary fs-6">R$ 25,00</span></div>
+                    </div>
+                </div>
+
+                <h5 class="fw-bold text-dark mb-3"><i class="fa-solid fa-upload me-2 text-primary"></i>Registrar Comprovante de Pagamento</h5>
+                <form method="post" action="/pagamento" enctype="multipart/form-data" id="form-comprovante">
+                    <div class="mb-3">
+                        <label for="identificador" class="form-label small fw-bold text-secondary">Matrícula ou CPF do Associado *</label>
+                        <input type="text" id="identificador" name="identificador" class="form-control" placeholder="Ex: ASG-2024-001 ou 123.456.789-00" value="<%= typeof associadoLogado !== 'undefined' && associadoLogado ? associadoLogado.matricula : '' %>" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="comprovante" class="form-label small fw-bold text-secondary">Arquivo do Comprovante (PDF, JPG ou PNG)</label>
+                        <input type="file" id="comprovante" name="comprovante" class="form-control" accept=".pdf,image/*">
+                        <small class="text-muted">Se não puder anexar agora, você também pode enviar direto no WhatsApp da secretaria.</small>
+                    </div>
+                    <div class="mb-3">
+                        <label for="observacoes" class="form-label small fw-bold text-secondary">Observações / Mês de Referência</label>
+                        <textarea id="observacoes" name="observacoes" rows="2" class="form-control" placeholder="Ex: Mensalidade referente a Setembro/2026..."></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary fw-bold w-100 py-3 shadow-sm" id="btn-submit-comprovante">
+                        <i class="fa-solid fa-paper-plane me-2"></i> Registrar Comprovante
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <div class="col-lg-5">
+            <div class="card border-0 shadow-sm rounded-4 p-4 text-center mb-4">
+                <h5 class="fw-bold text-primary mb-3"><i class="fa-solid fa-qrcode me-2"></i>QR Code PIX</h5>
+                <div class="bg-white p-3 rounded-3 d-inline-block border shadow-sm mx-auto mb-3">
+                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=Polyanabritoflamengobeatriz@gmail.com" alt="QR Code PIX ASSGA" class="img-fluid" style="width: 200px; height: 200px;">
+                </div>
+                <p class="small text-muted mb-0">Abra o aplicativo do seu banco, escolha a opção <strong>PIX</strong> e escaneie o código acima.</p>
+            </div>
+
+            <div class="card border-0 text-white p-4 rounded-4 shadow-sm" style="background: linear-gradient(135deg, #003366 0%, #004aad 100%);">
+                <h6 class="fw-bold text-warning mb-2"><i class="fa-solid fa-circle-question me-2"></i>Dúvidas sobre o pagamento?</h6>
+                <p class="small text-light mb-3">Fale diretamente com o departamento financeiro da ASSGA via WhatsApp:</p>
+                <a href="https://wa.me/5584996981248?text=Ol%C3%A1%2C%20tenho%20d%C3%BAvidas%20sobre%20o%20pagamento%20da%20mensalidade%20da%20ASSGA" target="_blank" rel="noopener noreferrer" class="btn btn-success fw-bold w-100 py-2 shadow-sm">
+                    <i class="fa-brands fa-whatsapp me-2"></i> Conversar com a Tesouraria
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function copyPixKey() {
+        const copyText = document.getElementById("chavePix");
+        copyText.select();
+        copyText.setSelectionRange(0, 99999);
+        navigator.clipboard.writeText(copyText.value);
+        
+        const alertBox = document.getElementById("pixCopyAlert");
+        alertBox.classList.remove("d-none");
+        setTimeout(() => {
+            alertBox.classList.add("d-none");
+        }, 4000);
+    }
+</script>
+
+<%- include('partials/footer') %>

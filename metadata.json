@@ -1,0 +1,8 @@
+{
+  "name": "ASSGA - Associação dos Surdos",
+  "description": "Portal oficial da Associação dos Surdos de São Gonçalo do Amarante (ASSGA) com estatuto social, diretoria, departamento de esportes, carteirinha digital, área do associado e assistente virtual LIBRAS.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

@@ -1,0 +1,64 @@
+<%- include('../partials/header', { title: 'Painel de Administração - ASSGA', active_page: 'admin' }) %>
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6 col-lg-5">
+            <div class="card border-0 shadow-lg rounded-4 overflow-hidden">
+                <div class="p-4 text-center text-white" style="background: linear-gradient(135deg, #0f172a 0%, #003366 100%);">
+                    <div class="bg-warning text-dark rounded-circle d-inline-flex align-items-center justify-content-center mb-2 shadow-sm" style="width: 60px; height: 60px;">
+                        <i class="fa-solid fa-lock fs-3"></i>
+                    </div>
+                    <h4 class="fw-bold mb-1">Painel Administrativo ASSGA</h4>
+                    <span class="badge bg-danger px-3 py-1 fw-bold text-uppercase" style="letter-spacing: 0.5px;">Superuser & Staff</span>
+                </div>
+
+                <div class="p-4 p-md-5 bg-white">
+                    <% if (typeof error !== 'undefined' && error) { %>
+                        <div class="alert alert-danger py-2 small mb-3">
+                            <i class="fa-solid fa-triangle-exclamation me-1"></i> <%= error %>
+                        </div>
+                    <% } %>
+
+                    <form method="post" action="/admin/login" id="admin-login-form">
+                        <div class="mb-3">
+                            <label for="username" class="form-label small fw-bold text-secondary">Usuário ou E-mail do Administrador</label>
+                            <input type="text" id="username" name="username" class="form-control form-control-lg" value="admin" required autofocus>
+                        </div>
+
+                        <div class="mb-4">
+                            <label for="password" class="form-label small fw-bold text-secondary">Senha</label>
+                            <input type="password" id="password" name="password" class="form-control form-control-lg" placeholder="Digite sua senha de admin" value="admin123" required>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary btn-lg fw-bold w-100 py-3 shadow-sm" id="btn-admin-submit">
+                            <i class="fa-solid fa-shield-halved me-2 text-warning"></i> Entrar como Superusuário
+                        </button>
+                    </form>
+
+                    <div class="p-3 bg-light rounded-3 small text-secondary mt-4 border">
+                        <div class="fw-bold text-dark mb-1"><i class="fa-solid fa-circle-check text-success me-1"></i> Acesso Direto de Superusuário:</div>
+                        <p class="mb-2 text-muted" style="font-size: 11px;">
+                            Diferente do Vercel/SQLite onde o usuário era apagado a cada reinício, este ambiente mantém a sessão de superusuário com todas as permissões <code>is_staff=True</code> e <code>is_superuser=True</code>.
+                        </p>
+                        <div class="d-flex gap-2">
+                            <button type="button" class="btn btn-sm btn-outline-dark w-100" onclick="document.getElementById('username').value='admin'; document.getElementById('password').value='admin123'; document.getElementById('admin-login-form').submit();">
+                                <i class="fa-solid fa-bolt text-warning me-1"></i> Login Rápido (admin)
+                            </button>
+                            <button type="button" class="btn btn-sm btn-outline-secondary w-100" onclick="document.getElementById('username').value='deafdonascimento@gmail.com'; document.getElementById('password').value='admin123'; document.getElementById('admin-login-form').submit();">
+                                <i class="fa-solid fa-user me-1"></i> Login (Email)
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="text-center mt-3">
+                        <a href="/" class="small text-muted text-decoration-none">
+                            <i class="fa-solid fa-arrow-left me-1"></i> Voltar ao Portal Público
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<%- include('../partials/footer') %>

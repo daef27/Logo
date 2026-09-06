@@ -1,0 +1,230 @@
+<%- include('partials/header', { title: 'Início - ASSGA Associação dos Surdos', active_page: 'home' }) %>
+
+<div class="container">
+    <!-- Hero Banner com Identidade Visual -->
+    <div class="p-4 p-md-5 mb-4 rounded-4 shadow-sm" style="background: linear-gradient(135deg, #003366 0%, #004aad 100%); color: white;">
+        <div class="container-fluid py-2">
+            <div class="row align-items-center">
+                <div class="col-lg-8">
+                    <span class="badge bg-warning text-dark px-3 py-2 rounded-pill fw-bold mb-3 shadow-sm">
+                        <i class="fa-solid fa-hands-asl-interpreting me-1"></i> Comunidade Surda Potiguar
+                    </span>
+                    <h1 class="display-5 fw-bold text-white mb-3">ASSGA - Associação dos Surdos</h1>
+                    <p class="col-md-10 fs-5 text-light opacity-90">
+                        Promovendo inclusão, cidadania, direitos linguísticos em LIBRAS e excelência no desporto dos surdos em São Gonçalo do Amarante e região metropolitana.
+                    </p>
+                    <div class="d-flex flex-wrap gap-2 mt-4">
+                        <a href="/carteirinha" class="btn btn-warning btn-lg fw-bold px-4 shadow-sm" id="hero-btn-carteirinha">
+                            <i class="fa-solid fa-id-card me-2"></i> Emitir Carteirinha
+                        </a>
+                        <a href="/pagamento" class="btn btn-outline-light btn-lg px-4" id="hero-btn-pix">
+                            <i class="fa-brands fa-pix me-2"></i> Mensalidade PIX
+                        </a>
+                        <a href="/esportiva" class="btn btn-light btn-lg px-4 text-primary fw-semibold" id="hero-btn-esportes">
+                            <i class="fa-solid fa-trophy me-2"></i> Esportes
+                        </a>
+                        <button onclick="openAssistantModal()" class="btn btn-dark btn-lg px-4 text-warning border-warning" id="hero-btn-assistant">
+                            <i class="fa-solid fa-wand-magic-sparkles me-2"></i> Assistente LIBRAS
+                        </button>
+                    </div>
+                </div>
+                <div class="col-lg-4 text-center mt-4 mt-lg-0">
+                    <div class="card bg-white text-dark p-4 rounded-4 shadow border-0">
+                        <div class="bg-primary text-warning rounded-circle d-inline-flex align-items-center justify-content-center mx-auto mb-2" style="width: 48px; height: 48px;">
+                            <i class="fa-solid fa-bullhorn fs-5"></i>
+                        </div>
+                        <h6 class="fw-bold text-primary mb-2">Portal Digital Oficial</h6>
+                        <p class="small mb-3 text-muted">Acesse a emissão e impressão da carteirinha de sócio com validação eletrônica por QR Code.</p>
+                        <% if (typeof associadoLogado !== 'undefined' && associadoLogado) { %>
+                            <a href="/area-associado" class="btn btn-success btn-sm fw-bold w-100 py-2">
+                                <i class="fa-solid fa-user-check me-1"></i> Acessar Meu Painel
+                            </a>
+                        <% } else { %>
+                            <a href="/login" class="btn btn-primary btn-sm fw-bold w-100 py-2">
+                                <i class="fa-solid fa-right-to-bracket me-1"></i> Área do Associado
+                            </a>
+                        <% } %>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Seção de Destaques em Cards -->
+    <div class="row g-4 mb-5">
+        <div class="col-md-4">
+            <div class="card h-100 border-0 shadow-sm rounded-3 hover-shadow">
+                <div class="card-body p-4">
+                    <div class="bg-primary text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 50px; height: 50px;">
+                        <i class="fa-solid fa-trophy fs-4 text-warning"></i>
+                    </div>
+                    <h5 class="card-title fw-bold text-primary">Desporto de Surdos</h5>
+                    <p class="card-text text-muted">Modalidades como futsal masculino e feminino, voleibol e atletismo, com treinos regulares e participação em torneios estaduais e nacionais.</p>
+                    <a href="/esportiva" class="btn btn-link text-primary p-0 fw-bold">Conhecer Modalidades &rarr;</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card h-100 border-0 shadow-sm rounded-3 hover-shadow">
+                <div class="card-body p-4">
+                    <div class="bg-warning text-dark rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 50px; height: 50px;">
+                        <i class="fa-solid fa-scale-balanced fs-4"></i>
+                    </div>
+                    <h5 class="card-title fw-bold text-dark">Estatuto Social</h5>
+                    <p class="card-text text-muted">Conheça os direitos e deveres dos associados, estrutura da diretoria, conselho fiscal e objetivos estatutários da entidade.</p>
+                    <a href="/estatuto" class="btn btn-link text-dark p-0 fw-bold">Ler Estatuto &rarr;</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card h-100 border-0 shadow-sm rounded-3 hover-shadow">
+                <div class="card-body p-4">
+                    <div class="bg-success text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 50px; height: 50px;">
+                        <i class="fa-solid fa-id-card fs-4"></i>
+                    </div>
+                    <h5 class="card-title fw-bold text-success">Carteirinha Digital</h5>
+                    <p class="card-text text-muted">Identificação oficial com código de autenticação, comprovante de filiação e modelo pronto para impressão frente e verso.</p>
+                    <a href="/carteirinha" class="btn btn-link text-success p-0 fw-bold">Ver Carteirinha &rarr;</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slider de Fotos da ASSGA -->
+    <div class="mb-5">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h3 class="fw-bold text-primary mb-0"><i class="fa-solid fa-images me-2 text-warning"></i>Momentos da ASSGA</h3>
+            <span class="badge bg-light text-secondary border">Comunidade & Atividades</span>
+        </div>
+        <div id="eventosSlider" class="carousel slide carousel-fade shadow-sm rounded-4 overflow-hidden" data-bs-ride="carousel">
+            <div class="carousel-indicators">
+                <button type="button" data-bs-target="#eventosSlider" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Foto 1"></button>
+                <button type="button" data-bs-target="#eventosSlider" data-bs-slide-to="1" aria-label="Foto 2"></button>
+                <button type="button" data-bs-target="#eventosSlider" data-bs-slide-to="2" aria-label="Foto 3"></button>
+                <button type="button" data-bs-target="#eventosSlider" data-bs-slide-to="3" aria-label="Foto 4"></button>
+            </div>
+            <div class="carousel-inner">
+                <div class="carousel-item active">
+                    <div class="evento-slide d-flex align-items-end">
+                        <img src="/static/imagens/Assga_foto.jpg" alt="ASSGA em atividade">
+                        <div class="evento-slide-overlay"></div>
+                        <div class="evento-slide-content text-white p-4 p-md-5">
+                            <span class="badge bg-warning text-dark mb-2 fw-bold">Comunidade</span>
+                            <h4 class="fw-bold mb-1">ASSGA em Atividade</h4>
+                            <p class="small text-light opacity-90 mb-0">Encontros e confraternização da comunidade surda em São Gonçalo do Amarante.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="carousel-item">
+                    <div class="evento-slide d-flex align-items-end">
+                        <img src="/static/imagens/foto1.jpg" alt="Torneio de Futsal da ASSGA">
+                        <div class="evento-slide-overlay"></div>
+                        <div class="evento-slide-content text-white p-4 p-md-5">
+                            <span class="badge bg-primary mb-2 fw-bold">Desporto</span>
+                            <h4 class="fw-bold mb-1">Torneios e Esporte Adaptado</h4>
+                            <p class="small text-light opacity-90 mb-0">Equipes de futsal e atletas surdos competindo em alto nível.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="carousel-item">
+                    <div class="evento-slide d-flex align-items-end">
+                        <img src="/static/imagens/foto2.jpg" alt="Reunião e Assembleia ASSGA">
+                        <div class="evento-slide-overlay"></div>
+                        <div class="evento-slide-content text-white p-4 p-md-5">
+                            <span class="badge bg-info text-dark mb-2 fw-bold">Institucional</span>
+                            <h4 class="fw-bold mb-1">Reuniões e Assembleias Gerais</h4>
+                            <p class="small text-light opacity-90 mb-0">Participação democrática de todos os associados em LIBRAS.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="carousel-item">
+                    <div class="evento-slide d-flex align-items-end">
+                        <img src="/static/imagens/halloween-assga.jpeg" alt="2º Halloween ASSGA">
+                        <div class="evento-slide-overlay"></div>
+                        <div class="evento-slide-content text-white p-4 p-md-5">
+                            <span class="badge bg-danger mb-2 fw-bold">Evento Especial</span>
+                            <h4 class="fw-bold mb-1">2º HALLOWEEN ASSGA</h4>
+                            <p class="small text-light opacity-90 mb-0">Celebração temática com jogos, premiações e diversão inclusiva.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#eventosSlider" data-bs-slide="prev" aria-label="Foto anterior">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#eventosSlider" data-bs-slide="next" aria-label="Próxima foto">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Próximos Eventos em Destaque -->
+    <div class="mb-5">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h3 class="fw-bold text-primary mb-0"><i class="fa-solid fa-calendar-check me-2 text-warning"></i>Próximos Eventos</h3>
+            <a href="/eventos" class="btn btn-outline-primary btn-sm fw-bold">Ver Todos os Eventos &rarr;</a>
+        </div>
+        <div class="row g-4">
+            <% if (typeof eventos !== 'undefined' && eventos.length > 0) { %>
+                <% for (const ev of eventos.slice(0, 3)) { %>
+                    <div class="col-md-4">
+                        <div class="card h-100 border-0 shadow-sm rounded-4 overflow-hidden hover-shadow">
+                            <img src="<%= ev.imagem_url %>" class="card-img-top" alt="<%= ev.titulo %>" style="height: 160px; object-fit: cover;">
+                            <div class="card-body p-4 d-flex flex-column">
+                                <div class="d-flex justify-content-between align-items-start mb-2">
+                                    <span class="badge bg-primary small"><%= ev.tipo %></span>
+                                    <% if (ev.libras_disponivel) { %>
+                                        <span class="badge bg-warning text-dark"><i class="fa-solid fa-hands-asl-interpreting me-1"></i>LIBRAS</span>
+                                    <% } %>
+                                </div>
+                                <h5 class="fw-bold text-dark mb-2"><%= ev.titulo %></h5>
+                                <p class="text-muted small mb-2"><i class="fa-solid fa-calendar text-primary me-2"></i><%= ev.data_inicio %></p>
+                                <p class="text-muted small mb-3"><i class="fa-solid fa-location-dot text-danger me-2"></i><%= ev.local %></p>
+                                <p class="text-secondary small mb-3 flex-grow-1"><%= ev.descricao %></p>
+                                <a href="/eventos" class="btn btn-outline-primary btn-sm w-100 fw-semibold">Ver Detalhes</a>
+                            </div>
+                        </div>
+                    </div>
+                <% } %>
+            <% } %>
+        </div>
+    </div>
+</div>
+
+<style>
+    .evento-slide {
+        min-height: 400px;
+        position: relative;
+        background: #003366;
+    }
+
+    .evento-slide img,
+    .evento-slide-overlay {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+    }
+
+    .evento-slide img {
+        object-fit: cover;
+    }
+
+    .evento-slide-overlay {
+        background: linear-gradient(90deg, rgba(0, 31, 63, 0.95), rgba(0, 51, 102, 0.45));
+    }
+
+    .evento-slide-content {
+        position: relative;
+        z-index: 1;
+        max-width: 760px;
+    }
+
+    @media (max-width: 576px) {
+        .evento-slide {
+            min-height: 330px;
+        }
+    }
+</style>
+
+<%- include('partials/footer') %>

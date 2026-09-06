@@ -1,0 +1,45 @@
+<%- include('partials/header', { title: 'Diretoria Executiva - ASSGA', active_page: 'diretoria' }) %>
+
+<div class="container py-3">
+    <div class="text-center mb-5">
+        <span class="badge bg-primary px-3 py-2 rounded-pill fw-bold text-uppercase">Gestão 2024-2028</span>
+        <h2 class="fw-bold text-primary mt-2">Diretoria Executiva e Conselho</h2>
+        <p class="text-muted">Lideranças comprometidas com a valorização, transparência e desenvolvimento da comunidade surda.</p>
+    </div>
+
+    <div class="row g-4 justify-content-center">
+        <% if (typeof membros !== 'undefined' && membros.length > 0) { %>
+            <% for (const membro of membros) { %>
+                <div class="col-md-6 col-lg-4">
+                    <div class="card h-100 border-0 shadow-sm rounded-4 overflow-hidden text-center hover-shadow">
+                        <div class="bg-light py-4 border-bottom position-relative">
+                            <div class="rounded-circle shadow-sm border border-3 border-warning d-inline-flex align-items-center justify-content-center bg-primary text-white" style="width: 110px; height: 110px; font-size: 2.5rem; margin: 0 auto;">
+                                <i class="fa-solid fa-user text-warning"></i>
+                            </div>
+                        </div>
+                        <div class="card-body p-4 d-flex flex-column">
+                            <span class="badge bg-primary text-uppercase px-3 py-1 mb-2 align-self-center"><%= membro.cargo %></span>
+                            <h5 class="fw-bold text-dark mb-1"><%= membro.nome %></h5>
+                            <p class="small text-muted mb-2">Gestão: <%= membro.gestao %></p>
+                            <% if (membro.bio) { %>
+                                <p class="small text-secondary mb-3 flex-grow-1"><%= membro.bio %></p>
+                            <% } %>
+                            
+                            <div class="d-flex justify-content-center gap-2 pt-3 border-top mt-auto">
+                                <% if (membro.email) { %>
+                                    <a href="mailto:<%= membro.email %>" class="btn btn-sm btn-outline-primary rounded-circle" title="E-mail"><i class="fa-solid fa-envelope"></i></a>
+                                <% } %>
+                                <% if (membro.telefone) { %>
+                                    <% const cleanPhone = membro.telefone.replace(/\D/g, ''); %>
+                                    <a href="https://wa.me/55<%= cleanPhone %>" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-outline-success rounded-circle" title="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>
+                                <% } %>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <% } %>
+        <% } %>
+    </div>
+</div>
+
+<%- include('partials/footer') %>

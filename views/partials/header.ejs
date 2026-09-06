@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= typeof title !== 'undefined' ? title : 'ASSGA - Associação dos Surdos' %></title>
+    <meta name="description" content="Portal oficial da Associação dos Surdos de São Gonçalo do Amarante (ASSGA) - Esporte, Cultura, Acessibilidade em LIBRAS e Cidadania.">
+    <meta property="og:title" content="<%= typeof title !== 'undefined' ? title : 'ASSGA - Associação dos Surdos' %>">
+    <meta property="og:description" content="Portal oficial da Associação dos Surdos de São Gonçalo do Amarante (ASSGA)">
+    
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- FontAwesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --assga-blue-dark: #003366;
+            --assga-blue: #004aad;
+            --assga-red: #c62828;
+            --assga-yellow: #ffc107;
+            --assga-bg: #f8fafc;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: var(--assga-bg);
+            color: #1e293b;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .navbar-assga {
+            background-color: var(--assga-blue-dark) !important;
+            border-bottom: 3px solid var(--assga-red);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .navbar-assga .navbar-brand {
+            font-weight: 800;
+            letter-spacing: 0.5px;
+            color: #ffffff !important;
+        }
+
+        .navbar-assga .nav-link {
+            color: #e2e8f0 !important;
+            font-weight: 500;
+            font-size: 0.93rem;
+            padding: 0.5rem 0.75rem !important;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+        }
+
+        .navbar-assga .nav-link:hover {
+            color: var(--assga-yellow) !important;
+            background-color: rgba(255, 255, 255, 0.08);
+        }
+
+        .navbar-assga .nav-link.active {
+            color: var(--assga-yellow) !important;
+            font-weight: 700;
+            background-color: rgba(255, 255, 255, 0.12);
+        }
+
+        .btn-assga-pix {
+            background-color: #00b09b;
+            color: white;
+            font-weight: 600;
+            border: none;
+        }
+
+        .btn-assga-pix:hover {
+            background-color: #008f7d;
+            color: white;
+        }
+
+        .footer-assga {
+            background-color: var(--assga-blue-dark);
+            color: #94a3b8;
+            margin-top: auto;
+            border-top: 4px solid var(--assga-red);
+        }
+
+        .footer-assga a {
+            color: #cbd5e1;
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+
+        .footer-assga a:hover {
+            color: var(--assga-yellow);
+        }
+
+        .accessibility-bar {
+            background: #001f3f;
+            color: #e2e8f0;
+            font-size: 0.8rem;
+            padding: 4px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .hover-shadow {
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .hover-shadow:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0, 51, 102, 0.12) !important;
+        }
+
+        .ai-assistant-btn {
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            z-index: 1040;
+            background: linear-gradient(135deg, #004aad 0%, #003366 100%);
+            color: white;
+            border: 2px solid #ffc107;
+            border-radius: 50px;
+            padding: 12px 20px;
+            font-weight: 700;
+            box-shadow: 0 8px 24px rgba(0, 51, 102, 0.35);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .ai-assistant-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 12px 30px rgba(0, 51, 102, 0.45);
+            color: #ffc107;
+        }
+    </style>
+    <%- typeof extraHead !== 'undefined' ? extraHead : '' %>
+</head>
+<body>
+    <!-- Barra de Acessibilidade e Identidade LIBRAS -->
+    <div class="accessibility-bar">
+        <div class="container d-flex justify-content-between align-items-center">
+            <div class="d-flex align-items-center gap-2">
+                <span class="badge bg-warning text-dark fw-bold px-2 py-1"><i class="fa-solid fa-hands-asl-interpreting me-1"></i> LIBRAS</span>
+                <span class="d-none d-sm-inline">Associação dos Surdos de São Gonçalo do Amarante - RN | CNPJ: 57.242.499/0001-60</span>
+            </div>
+            <div class="d-flex align-items-center gap-3">
+                <a href="https://wa.me/5584996981248" target="_blank" class="text-light text-decoration-none small"><i class="fa-brands fa-whatsapp text-success me-1"></i> (84) 99698-1248</a>
+                <button class="btn btn-link text-warning p-0 text-decoration-none small fw-bold" onclick="openAssistantModal()"><i class="fa-solid fa-wand-magic-sparkles me-1"></i> Assistente LIBRAS</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navegação Principal -->
+    <nav class="navbar navbar-expand-lg navbar-dark navbar-assga sticky-top">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center gap-2" href="/" id="brand-link">
+                <div class="bg-white rounded-circle p-1 d-flex align-items-center justify-content-center shadow-sm" style="width: 44px; height: 44px;">
+                    <i class="fa-solid fa-hands-asl-interpreting fs-4 text-primary"></i>
+                </div>
+                <div>
+                    <span class="fs-4 fw-bold text-white d-block lh-1">ASSGA</span>
+                    <small class="d-none d-md-block text-warning" style="font-size: 0.68rem; font-weight: 600; letter-spacing: 0.5px;">ASSOCIAÇÃO DE SURDOS</small>
+                </div>
+            </a>
+            
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false" aria-label="Menu de Navegação" id="nav-toggle-btn">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarContent">
+                <ul class="navbar-nav ms-auto mb-2 mb-lg-0 align-items-lg-center gap-1">
+                    <li class="nav-item">
+                        <a class="nav-link <%= typeof active_page !== 'undefined' && active_page === 'home' ? 'active' : '' %>" href="/" id="nav-home"><i class="fa-solid fa-house me-1"></i> Início</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link <%= typeof active_page !== 'undefined' && active_page === 'historia' ? 'active' : '' %>" href="/historia" id="nav-historia"><i class="fa-solid fa-book-open me-1"></i> História</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link <%= typeof active_page !== 'undefined' && active_page === 'estatuto' ? 'active' : '' %>" href="/estatuto" id="nav-estatuto"><i class="fa-solid fa-scale-balanced me-1"></i> Estatuto</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link <%= typeof active_page !== 'undefined' && active_page === 'diretoria' ? 'active' : '' %>" href="/diretoria" id="nav-diretoria"><i class="fa-solid fa-users me-1"></i> Diretoria</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link <%= typeof active_page !== 'undefined' && active_page === 'esportiva' ? 'active' : '' %>" href="/esportiva" id="nav-esportiva"><i class="fa-solid fa-futbol me-1"></i> Esportes</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link <%= typeof active_page !== 'undefined' && active_page === 'eventos' ? 'active' : '' %>" href="/eventos" id="nav-eventos"><i class="fa-solid fa-calendar me-1"></i> Eventos</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link <%= typeof active_page !== 'undefined' && active_page === 'pagamento' ? 'active' : '' %>" href="/pagamento" id="nav-pagamento"><i class="fa-solid fa-hand-holding-dollar me-1"></i> PIX</a>
+                    </li>
+
+                    <% if (typeof adminLogged !== 'undefined' && adminLogged) { %>
+                    <li class="nav-item ms-lg-2">
+                        <a class="btn btn-danger btn-sm fw-bold px-3 rounded-pill shadow-sm" href="/admin" id="nav-admin"><i class="fa-solid fa-crown me-1 text-warning"></i> Admin</a>
+                    </li>
+                    <% } else if (typeof associadoLogado !== 'undefined' && associadoLogado) { %>
+                    <li class="nav-item">
+                        <a class="nav-link <%= typeof active_page !== 'undefined' && active_page === 'carteirinha' ? 'active' : '' %>" href="/carteirinha" id="nav-carteirinha"><i class="fa-solid fa-id-card me-1"></i> Carteirinha</a>
+                    </li>
+                    <li class="nav-item ms-lg-2">
+                        <a class="btn btn-warning btn-sm fw-bold px-3 shadow-sm" href="/area-associado" id="nav-painel"><i class="fa-solid fa-user-check me-1"></i> Meu Painel</a>
+                    </li>
+                    <li class="nav-item ms-lg-1">
+                        <a class="nav-link text-danger" href="/logout" title="Sair do Portal" id="nav-logout"><i class="fa-solid fa-arrow-right-from-bracket"></i> Sair</a>
+                    </li>
+                    <% } else { %>
+                    <li class="nav-item ms-lg-2">
+                        <a class="btn btn-outline-light btn-sm px-3 rounded-pill fw-bold" href="/login" id="nav-login"><i class="fa-solid fa-right-to-bracket me-1"></i> Entrar</a>
+                    </li>
+                    <li class="nav-item ms-lg-1">
+                        <a class="nav-link text-warning opacity-75 small" href="/admin" title="Acesso Superusuário" id="nav-admin-link"><i class="fa-solid fa-shield-halved"></i> Admin</a>
+                    </li>
+                    <% } %>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Alertas Flash -->
+    <% if (typeof flashMessage !== 'undefined' && flashMessage) { %>
+    <div class="container mt-3" id="flash-alert-container">
+        <div class="alert alert-<%= flashMessage.type || 'info' %> alert-dismissible fade show shadow-sm" role="alert">
+            <i class="fa-solid fa-circle-info me-2"></i> <%= flashMessage.text %>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    </div>
+    <% } %>
+
+    <main class="flex-grow-1 py-4">

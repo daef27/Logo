@@ -1,0 +1,255 @@
+    </main>
+
+    <!-- Botão Flutuante do Assistente Virtual LIBRAS -->
+    <button class="ai-assistant-btn" onclick="openAssistantModal()" id="btn-open-assistant" aria-label="Abrir Assistente Virtual ASSGA em LIBRAS">
+        <i class="fa-solid fa-hands-asl-interpreting fs-5"></i>
+        <span>Assistente LIBRAS</span>
+    </button>
+
+    <!-- Modal do Assistente Virtual LIBRAS (Gemini AI) -->
+    <div class="modal fade" id="assistantModal" tabindex="-1" aria-labelledby="assistantModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content border-0 shadow-lg rounded-4 overflow-hidden">
+                <div class="modal-header text-white" style="background: linear-gradient(135deg, #003366 0%, #004aad 100%);">
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="bg-warning text-dark rounded-circle p-2 d-flex align-items-center justify-content-center shadow-sm" style="width: 44px; height: 44px;">
+                            <i class="fa-solid fa-hands-asl-interpreting fs-4"></i>
+                        </div>
+                        <div>
+                            <h5 class="modal-title fw-bold mb-0" id="assistantModalLabel">Assistente Virtual ASSGA</h5>
+                            <small class="text-warning opacity-90"><i class="fa-solid fa-circle text-success me-1" style="font-size: 8px;"></i> Inteligência Artificial & Acessibilidade LIBRAS</small>
+                        </div>
+                    </div>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fechar"></button>
+                </div>
+                
+                <div class="modal-body p-4" style="background-color: #f8fafc;">
+                    <p class="small text-muted mb-3">
+                        Olá! Sou o assistente virtual da <strong>ASSGA (Associação dos Surdos de São Gonçalo do Amarante)</strong>. Pergunte sobre estatuto, esportes, carteirinha, pagamentos PIX ou história da associação.
+                    </p>
+
+                    <!-- Histórico da Conversa -->
+                    <div id="chatHistory" class="p-3 bg-white rounded-3 border mb-3 overflow-auto" style="max-height: 320px; min-height: 220px;">
+                        <div class="d-flex gap-2 mb-3">
+                            <div class="bg-primary text-white rounded-circle p-2 d-flex align-items-center justify-content-center flex-shrink-0" style="width: 32px; height: 32px;">
+                                <i class="fa-solid fa-robot text-warning" style="font-size: 13px;"></i>
+                            </div>
+                            <div class="bg-light p-3 rounded-3 text-dark small" style="max-width: 85%;">
+                                Olá! Como posso ajudar você hoje com as informações da ASSGA? Você pode perguntar:
+                                <ul class="mb-0 mt-2 ps-3">
+                                    <li>Como emitir minha carteirinha de sócio?</li>
+                                    <li>Qual a chave PIX para pagamento da mensalidade?</li>
+                                    <li>Quais são os esportes e treinos oferecidos?</li>
+                                    <li>O que diz o estatuto sobre direitos dos associados?</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Sugestões Rápidas -->
+                    <div class="d-flex flex-wrap gap-1 mb-3">
+                        <button type="button" class="btn btn-outline-secondary btn-sm py-1 px-2 rounded-pill small" onclick="askQuickPrompt('Como emitir a carteirinha de sócio?')">Emitir Carteirinha</button>
+                        <button type="button" class="btn btn-outline-secondary btn-sm py-1 px-2 rounded-pill small" onclick="askQuickPrompt('Qual a chave PIX da ASSGA?')">Chave PIX</button>
+                        <button type="button" class="btn btn-outline-secondary btn-sm py-1 px-2 rounded-pill small" onclick="askQuickPrompt('Quais modalidades esportivas a ASSGA possui?')">Modalidades Esportivas</button>
+                        <button type="button" class="btn btn-outline-secondary btn-sm py-1 px-2 rounded-pill small" onclick="askQuickPrompt('Quem é o presidente da ASSGA?')">Diretoria</button>
+                    </div>
+
+                    <!-- Input de Pergunta -->
+                    <form id="assistantForm" onsubmit="handleAssistantSubmit(event)">
+                        <div class="input-group">
+                            <input type="text" id="assistantInput" class="form-control" placeholder="Digite sua dúvida sobre a ASSGA..." required autocomplete="off">
+                            <button class="btn btn-primary fw-bold px-3" type="submit" id="assistantSendBtn">
+                                <i class="fa-solid fa-paper-plane me-1"></i> Enviar
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Rodapé Institucional -->
+    <footer class="footer-assga pt-5 pb-3">
+        <div class="container">
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <h5 class="text-white fw-bold d-flex align-items-center gap-2">
+                        <i class="fa-solid fa-hands-asl-interpreting text-warning"></i> ASSGA
+                    </h5>
+                    <p class="small text-slate-400 mt-2">
+                        Associação dos Surdos de São Gonçalo do Amarante - RN. Fomentando o desporto adaptado, cidadania, acessibilidade linguística em LIBRAS e inclusão social permanente.
+                    </p>
+                    <div class="d-flex gap-3 fs-5 mt-3">
+                        <a href="https://www.instagram.com/assga_2019/" target="_blank" rel="noopener noreferrer" class="text-white" title="Instagram ASSGA"><i class="fa-brands fa-instagram"></i></a>
+                        <a href="https://www.youtube.com/@ASSGAESPORTES" target="_blank" rel="noopener noreferrer" class="text-white" title="YouTube ASSGA"><i class="fa-brands fa-youtube"></i></a>
+                        <a href="https://wa.me/5584996981248" target="_blank" rel="noopener noreferrer" class="text-white" title="WhatsApp ASSGA"><i class="fa-brands fa-whatsapp"></i></a>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <h6 class="text-white fw-bold">Atalhos do Portal</h6>
+                    <ul class="list-unstyled small">
+                        <li class="mb-1"><a href="/historia"><i class="fa-solid fa-angle-right me-1 text-warning"></i> História e Memória</a></li>
+                        <li class="mb-1"><a href="/estatuto"><i class="fa-solid fa-angle-right me-1 text-warning"></i> Estatuto Social Oficial</a></li>
+                        <li class="mb-1"><a href="/diretoria"><i class="fa-solid fa-angle-right me-1 text-warning"></i> Diretoria Executiva</a></li>
+                        <li class="mb-1"><a href="/esportiva"><i class="fa-solid fa-angle-right me-1 text-warning"></i> Departamento de Esportes</a></li>
+                        <li class="mb-1"><a href="/carteirinha"><i class="fa-solid fa-angle-right me-1 text-warning"></i> Emissão de Carteirinha</a></li>
+                        <li class="mb-1"><a href="/pagamento"><i class="fa-solid fa-angle-right me-1 text-warning"></i> Contribuição e Mensalidade PIX</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4">
+                    <h6 class="text-white fw-bold">Contato e Sede</h6>
+                    <p class="small mb-1"><i class="fa-solid fa-envelope me-2 text-danger"></i> assgar2019@gmail.com</p>
+                    <p class="small mb-1"><i class="fa-solid fa-phone me-2 text-danger"></i> (84) 99698-1248</p>
+                    <p class="small mb-1"><i class="fa-solid fa-location-dot me-2 text-danger"></i> São Gonçalo do Amarante - RN</p>
+                    <p class="small text-muted mt-2">CNPJ: 57.242.499/0001-60</p>
+                </div>
+            </div>
+            <hr class="border-secondary my-4">
+            <div class="d-flex flex-wrap justify-content-between align-items-center small text-secondary">
+                <div>
+                    © <%= new Date().getFullYear() %> ASSGA - Associação dos Surdos de São Gonçalo do Amarante. Todos os direitos reservados.
+                </div>
+                <div class="mt-2 mt-md-0">
+                    <span class="badge bg-secondary">Acessível em LIBRAS</span>
+                    <span class="badge bg-primary ms-1">Node.js & Express</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- VLibras Widget para Acessibilidade em LIBRAS -->
+    <div vw class="enabled">
+        <div vw-access-button class="active"></div>
+        <div vw-plugin-wrapper>
+            <div class="vw-plugin-top-wrapper"></div>
+        </div>
+    </div>
+    <script src="https://vlibras.gov.br/app/vlibras-plugin.js"></script>
+    <script>
+        try {
+            new window.VLibras.Widget('https://vlibras.gov.br/app');
+        } catch(e) {
+            console.log('VLibras initialized');
+        }
+    </script>
+
+    <!-- Bootstrap 5 Bundle JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Script do Assistente Virtual -->
+    <script>
+        let assistantModalInstance = null;
+        function openAssistantModal() {
+            const modalEl = document.getElementById('assistantModal');
+            if (!assistantModalInstance) {
+                assistantModalInstance = new bootstrap.Modal(modalEl);
+            }
+            assistantModalInstance.show();
+            setTimeout(() => {
+                document.getElementById('assistantInput')?.focus();
+            }, 400);
+        }
+
+        function askQuickPrompt(text) {
+            const input = document.getElementById('assistantInput');
+            if (input) {
+                input.value = text;
+                document.getElementById('assistantForm').dispatchEvent(new Event('submit'));
+            }
+        }
+
+        async function handleAssistantSubmit(e) {
+            e.preventDefault();
+            const input = document.getElementById('assistantInput');
+            const question = input.value.trim();
+            if (!question) return;
+
+            const chatHistory = document.getElementById('chatHistory');
+            const sendBtn = document.getElementById('assistantSendBtn');
+
+            // Append user message
+            const userMsgHtml = `
+                <div class="d-flex gap-2 mb-3 justify-content-end">
+                    <div class="bg-primary text-white p-3 rounded-3 small" style="max-width: 85%;">
+                        ${escapeHtml(question)}
+                    </div>
+                    <div class="bg-secondary text-white rounded-circle p-2 d-flex align-items-center justify-content-center flex-shrink-0" style="width: 32px; height: 32px;">
+                        <i class="fa-solid fa-user" style="font-size: 13px;"></i>
+                    </div>
+                </div>
+            `;
+            chatHistory.insertAdjacentHTML('beforeend', userMsgHtml);
+            input.value = '';
+            chatHistory.scrollTop = chatHistory.scrollHeight;
+
+            // Loading state
+            sendBtn.disabled = true;
+            sendBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>';
+
+            const typingId = 'typing-' + Date.now();
+            const typingHtml = `
+                <div class="d-flex gap-2 mb-3" id="${typingId}">
+                    <div class="bg-primary text-white rounded-circle p-2 d-flex align-items-center justify-content-center flex-shrink-0" style="width: 32px; height: 32px;">
+                        <i class="fa-solid fa-robot text-warning" style="font-size: 13px;"></i>
+                    </div>
+                    <div class="bg-light p-3 rounded-3 text-muted small fst-italic">
+                        <i class="fa-solid fa-ellipsis fa-fade me-1"></i> Consultando base de conhecimento da ASSGA...
+                    </div>
+                </div>
+            `;
+            chatHistory.insertAdjacentHTML('beforeend', typingHtml);
+            chatHistory.scrollTop = chatHistory.scrollHeight;
+
+            try {
+                const res = await fetch('/api/assistente-libras', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ pergunta: question })
+                });
+                const data = await res.json();
+                
+                const typingEl = document.getElementById(typingId);
+                if (typingEl) typingEl.remove();
+
+                const botMsgHtml = `
+                    <div class="d-flex gap-2 mb-3">
+                        <div class="bg-primary text-white rounded-circle p-2 d-flex align-items-center justify-content-center flex-shrink-0" style="width: 32px; height: 32px;">
+                            <i class="fa-solid fa-robot text-warning" style="font-size: 13px;"></i>
+                        </div>
+                        <div class="bg-light p-3 rounded-3 text-dark small" style="max-width: 85%; white-space: pre-wrap;">
+                            ${escapeHtml(data.resposta || data.reply || 'Desculpe, não consegui obter a resposta no momento.')}
+                        </div>
+                    </div>
+                `;
+                chatHistory.insertAdjacentHTML('beforeend', botMsgHtml);
+                chatHistory.scrollTop = chatHistory.scrollHeight;
+            } catch (err) {
+                const typingEl = document.getElementById(typingId);
+                if (typingEl) typingEl.remove();
+
+                const errorHtml = `
+                    <div class="d-flex gap-2 mb-3">
+                        <div class="bg-danger text-white rounded-circle p-2 d-flex align-items-center justify-content-center flex-shrink-0" style="width: 32px; height: 32px;">
+                            <i class="fa-solid fa-triangle-exclamation" style="font-size: 13px;"></i>
+                        </div>
+                        <div class="bg-light p-3 rounded-3 text-danger small">
+                            Não foi possível conectar ao assistente no momento. Por favor, tente novamente ou contate a secretaria via WhatsApp: (84) 99698-1248.
+                        </div>
+                    </div>
+                `;
+                chatHistory.insertAdjacentHTML('beforeend', errorHtml);
+                chatHistory.scrollTop = chatHistory.scrollHeight;
+            } finally {
+                sendBtn.disabled = false;
+                sendBtn.innerHTML = '<i class="fa-solid fa-paper-plane me-1"></i> Enviar';
+            }
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+    </script>
+</body>
+</html>
